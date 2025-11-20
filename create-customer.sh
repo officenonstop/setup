@@ -88,7 +88,8 @@ fish -c "alias $CUSTOMER_NAME-$TYPE-$SIZE 'lxc exec $CONTAINER_NAME -- su - root
 lxc exec $CONTAINER_NAME -- sh -c "grep -q \$(hostname) /etc/hosts || echo '127.0.1.1 \$(hostname)' >> /etc/hosts"
 lxc exec "$CONTAINER_NAME" -- bash -c "apt update -y && apt install -y fish; chsh -s /usr/bin/fish"
 
-lxc config device add ${CONTAINER_NAME} myport8080 proxy listen=tcp:0.0.0.0:8080 connect=tcp:127.0.0.1:8080
+#Dont use below, setup nginx as reverse proxy
+#lxc config device add ${CONTAINER_NAME} myport8080 proxy listen=tcp:0.0.0.0:8080 connect=tcp:127.0.0.1:8080
 
 echo
 echo "✅ Container '${CONTAINER_NAME}' created successfully! Use customername to switch to its container."
