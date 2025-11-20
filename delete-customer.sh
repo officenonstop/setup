@@ -33,7 +33,7 @@ lxc profile delete "$CONTAINER"
 lxc storage delete "$POOL"
 rm -f ~/.config/fish/functions/"$1"-"$2".fish
 
-lxc config device remove ${CONTAINER} myport8080
+#lxc config device remove ${CONTAINER} myport8080
 
 echo
 echo "✅ Cleanup complete for $CONTAINER."
