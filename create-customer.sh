@@ -84,7 +84,7 @@ lxc profile create "$CONTAINER_NAME" < "$CONTAINER_NAME".yaml
 echo "🚀 Launching container '${CONTAINER_NAME}' (size: ${SIZE}) ..."
 lxc launch ubuntu/24.04 "$CONTAINER_NAME" --profile "$CONTAINER_NAME" --config 'security.nesting=true'
 
-fish -c "alias $CUSTOMER_NAME-$TYPE 'lxc exec $CONTAINER_NAME -- su - root'; funcsave  $CUSTOMER_NAME-$TYPE"
+fish -c "alias $CUSTOMER_NAME-$TYPE-$SIZE 'lxc exec $CONTAINER_NAME -- su - root'; funcsave  $CUSTOMER_NAME-$TYPE-$SIZE"
 lxc exec $CONTAINER_NAME -- sh -c "grep -q \$(hostname) /etc/hosts || echo '127.0.1.1 \$(hostname)' >> /etc/hosts"
 lxc exec "$CONTAINER_NAME" -- bash -c "apt update -y && apt install -y fish; chsh -s /usr/bin/fish"
 
