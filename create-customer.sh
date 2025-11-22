@@ -84,7 +84,7 @@ lxc profile create "$CONTAINER_NAME" < "$CONTAINER_NAME".yaml
 echo "🚀 Launching container '${CONTAINER_NAME}' (size: ${SIZE}) ..."
 lxc launch ubuntu/24.04 "$CONTAINER_NAME" --profile "$CONTAINER_NAME" --config 'security.nesting=true'
 #wait so lxc can start container successfully
-wait 10
+sleep 10
 
 fish -c "alias $CUSTOMER_NAME-$TYPE-$SIZE 'lxc exec $CONTAINER_NAME -- su - root'; funcsave  $CUSTOMER_NAME-$TYPE-$SIZE"
 
