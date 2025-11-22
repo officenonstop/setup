@@ -110,7 +110,6 @@ lxc exec "$CONTAINER_NAME" -- bash -c "docker compose -f /root/erp/my.yml up --t
 
 #find logs easily
 lxc exec "$CONTAINER_NAME" -- bash -c "ln -s /var/snap/docker/common/var-lib-docker/volumes/erp_logs/_data /root/erp/erpnext-logs"
-lxc exec "$CONTAINER_NAME" -- bash -c 'mkdir -p /root/erp/docker-logs; for ID in $(docker ps -q); do NAME=$(docker inspect --format="{{.Name}}" $ID | sed "s/\//_/"); ln -sf /var/snap/docker/common/var-lib-docker/containers/$ID/${ID}-json.log /root/erp/docker-logs/${NAME}.log; done'
 
 #Dont use below, setup nginx as reverse proxy
 #lxc config device add ${CONTAINER_NAME} myport8080 proxy listen=tcp:0.0.0.0:8080 connect=tcp:127.0.0.1:8080
