@@ -104,6 +104,10 @@ lxc exec "$CONTAINER_NAME" -- bash -c "snap install docker"
 sleep 10
 lxc exec "$CONTAINER_NAME" -- bash -c "docker compose -f /root/erp/my.yml up --timestamps --force-recreate -d"
 
+#find logs easily
+lxc exec "$CONTAINER_NAME" -- bash -c "mkdir -p /root/erp/erpnext-logs"
+lxc exec "$CONTAINER_NAME" -- bash -c "ln -s /var/snap/docker/common/var-lib-docker/volumes/erp_logs/_data/* /root/erp/erpnext-logs/"
+
 #Dont use below, setup nginx as reverse proxy
 #lxc config device add ${CONTAINER_NAME} myport8080 proxy listen=tcp:0.0.0.0:8080 connect=tcp:127.0.0.1:8080
 
