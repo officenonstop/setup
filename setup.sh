@@ -13,6 +13,14 @@ apt install -y zfsutils-linux
 apt install -y fish
 chsh -s /usr/bin/fish
 
+sudo dpkg-reconfigure unattended-upgrades
+sudo sh -c 'echo "SystemMaxUse=200M" >> /etc/systemd/journald.conf'
+sudo sh -c 'echo "SystemMaxFileSize=50M" >> /etc/systemd/journald.conf'
+sudo systemctl mask snapd.snap-repair.service
+sudo systemctl mask snapd.snap-repair.timer
+sudo snap set system refresh.hold="$(date --date='2100-01-01' +%Y-%m-%d)"
+sudo systemctl mask snapd.refresh.service
+sudo systemctl mask snapd.refresh.timer
 
 snap install lxd --channel=6/stable
 lxd init --minimal
