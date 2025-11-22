@@ -85,8 +85,22 @@ echo "🚀 Launching container '${CONTAINER_NAME}' (size: ${SIZE}) ..."
 lxc launch ubuntu/24.04 "$CONTAINER_NAME" --profile "$CONTAINER_NAME" --config 'security.nesting=true'
 
 fish -c "alias $CUSTOMER_NAME-$TYPE-$SIZE 'lxc exec $CONTAINER_NAME -- su - root'; funcsave  $CUSTOMER_NAME-$TYPE-$SIZE"
-lxc exec $CONTAINER_NAME -- sh -c "grep -q \$(hostname) /etc/hosts || echo '127.0.1.1 \$(hostname)' >> /etc/hosts"
+
+#stop snap to refresh ever
+lxc exec "$CONTAINER_NAME" -- bash -c "sudo systemctl mask snapd.refresh.service"
+lxc exec "$CONTAINER_NAME" -- bash -c "sudo systemctl mask snapd.refresh.timer"
+
+#install fish, first fix hosts file and then install
+lxc exec "$CONTAINER_NAME" -- bash -c "grep -q \$(hostname) /etc/hosts || echo '127.0.1.1 \$(hostname)' >> /etc/hosts"
 lxc exec "$CONTAINER_NAME" -- bash -c "apt update -y && apt install -y fish; chsh -s /usr/bin/fish"
+
+#install docker and start containers
+lxc exec "$CONTAINER_NAME" -- bash -c "timedatectl set-timezone \"Asia/Kolkata\""
+lxc exec "$CONTAINER_NAME" -- bash -c "git clone https://github.com/officenonstop/erp --branch generic_v15 --single-branch"
+lxc exec "$CONTAINER_NAME" -- bash -c "snap install docker"
+#wait for docker to come up
+sleep 10
+lxc exec "$CONTAINER_NAME" -- bash -c "docker compose -f /root/erp/my.yml up --timestamps --force-recreate -d"
 
 #Dont use below, setup nginx as reverse proxy
 #lxc config device add ${CONTAINER_NAME} myport8080 proxy listen=tcp:0.0.0.0:8080 connect=tcp:127.0.0.1:8080
