@@ -92,6 +92,10 @@ fish -c "alias $CUSTOMER_NAME-$TYPE-$SIZE 'lxc exec $CONTAINER_NAME -- su - root
 lxc exec "$CONTAINER_NAME" -- bash -c "sudo systemctl mask snapd.refresh.service"
 lxc exec "$CONTAINER_NAME" -- bash -c "sudo systemctl mask snapd.refresh.timer"
 
+#restrict system log size
+lxc exec "$CONTAINER_NAME" -- bash -c "sudo sh -c 'echo \"SystemMaxUse=200M\" >> /etc/systemd/journald.conf'"
+lxc exec "$CONTAINER_NAME" -- bash -c "sudo sh -c 'echo \"SystemMaxFileSize=50M\" >> /etc/systemd/journald.conf'"
+
 #install fish, first fix hosts file and then install
 lxc exec "$CONTAINER_NAME" -- bash -c "grep -q \$(hostname) /etc/hosts || echo '127.0.1.1 \$(hostname)' >> /etc/hosts"
 lxc exec "$CONTAINER_NAME" -- bash -c "apt update -y && apt install -y fish; chsh -s /usr/bin/fish"
